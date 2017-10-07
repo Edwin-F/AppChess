@@ -2,9 +2,18 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-a, a:hover, a:visited, a:link, a:active
+#black a, #black a:hover,#black a:visited,#black a:link,#black a:active
 {
-    color: '#4997d0';
+    color: #303030;
     text-decoration: none;
     outline: none;
+    text-shadow: -2px 2px white;
+}
+
+#white a, #white a:hover,#white a:visited, #white a:link, #white a:active
+{
+    color: white;
+    text-decoration: none;
+    outline: none;
+    text-shadow: -2px 2px black;
 }
