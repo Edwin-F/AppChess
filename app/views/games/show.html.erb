@@ -1,35 +1,49 @@
 <script>
 function init() {
 
-var dialog = $('#pawn-promotion').dialog({
-    autoOpen: false,
-    width: 350,
-    height: 300,
-    modal: true,
-    closeOnEscape: false,
-    draggable: true,
-    title: 'Pawn Promotion',
-    buttons: {
-        'Promote Pawn': function(){
-           promotePawn("href")
-        },
-        'Cancel': function () {
-            $('#pawn-promotion').dialog('close');
-        }
-        
-    }
-});
+  var dialog = $('#pawn-promotion').dialog({
+      autoOpen: false,
+      width: 350,
+      height: 300,
+      modal: true,
+      closeOnEscape: false,
+      draggable: true,
+      title: 'Pawn Promotion',
+      buttons: {
+          'Promote Pawn': function(){
+             promotePawn("href","row","col","color")
+          },
+          'Cancel': function () {
+              $('#pawn-promotion').dialog('close');
+              //window.reload;
+          }
+          
+      }
+  });
 
-function promotePawn(link) {
-  alert("promote "+ link +" to "+ $('input[name=radio]:checked', '#pawn-promotion').val());
-            //Handle flagdata JSON and send ot serverside
-            // remember to call close in the server callback. :) 
-    // Do the flag thing.
-}
-$( "#pawn-promote" ).button().on( "click", function() {
-      dialog.dialog( "open" );
+  function promotePawn(link,row,col,color) {
+    alert("promote "+ link + row+col+color+" to "+ $('input[name=radio]:checked', '#pawn-promotion').val());
+    /*$.ajax(
+      type: "Post",
+      url: "/pieces", //will look something like this /games/:id/pieces(.:format) similar to nomster//
+      dataType: 'json',
+      data: { piece: { 
+              position_row: function, 
+              position_column: function,//probably inputs for the function
+              color: function,
+              type: $('input[name=radio]:checked', '#pawn-promotion').val()}
+             }
+    );
+    //second ajax request to delete previous pawn piece
+    $.ajax(
+      type: "Delete",
+      url: link
+    );*/
+  }
+  $( "#pawn-promote" ).button().on( "click", function() {
+        dialog.dialog( "open" );
+        //make sure to cancel reload here
     });
-
 
   turn = '<%= @game.turn %>';
   white = '<%= @game.white_player_id %>';
