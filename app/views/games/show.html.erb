@@ -1,6 +1,35 @@
 <script>
-
 function init() {
+
+var dialog = $('#pawn-promotion').dialog({
+    autoOpen: false,
+    width: 350,
+    height: 300,
+    modal: true,
+    closeOnEscape: false,
+    draggable: true,
+    title: 'Pawn Promotion',
+    buttons: {
+        'Promote Pawn': function(){
+           promotePawn("href")
+        },
+        'Cancel': function () {
+            $('#pawn-promotion').dialog('close');
+        }
+        
+    }
+});
+
+function promotePawn(link) {
+  alert("promote "+ link +" to "+ $('input[name=radio]:checked', '#pawn-promotion').val());
+            //Handle flagdata JSON and send ot serverside
+            // remember to call close in the server callback. :) 
+    // Do the flag thing.
+}
+$( "#pawn-promote" ).button().on( "click", function() {
+      dialog.dialog( "open" );
+    });
+
 
   turn = '<%= @game.turn %>';
   white = '<%= @game.white_player_id %>';
@@ -16,15 +45,39 @@ function init() {
   $('a').draggable({
     containment: 'table',
     scroll: false,
+    revert: false,
     start: function( event, ui) {
       $.ajaxSetup({ cache: false });
-      href = this.href;      
+      href = this.href;
+      pieceType = $(this).parent().data('piece-type');
+     //pieceType = this.parentElement.dataset.pieceType;
+     //.data('piece-type');
+     console.log(pieceType);      
     },
     drag: function( event, ui ) {
       xCoord = $('.ui-droppable-hover').data('x-position');
       yCoord = $('.ui-droppable-hover').data('y-position');
     },
     stop: function( event,ui ) {
+      if(pieceType == 'Pawn'){
+        alert('You are moving a Pawn Piece');
+        $('#promotion').modal('show')
+        //break;
+        $( "#dialog-confirm" ).dialog({
+          resizable: false,
+          height: "auto",
+          width: 400,
+          modal: true,
+          buttons: {
+            "Delete all items": function() {
+              $( this ).dialog( "close" );
+            },
+            Cancel: function() {
+              $( this ).dialog( "close" );
+            }
+          }
+    });
+      }
         $.ajax({
           type: "PUT",
           url: href,
@@ -34,11 +87,13 @@ function init() {
           },
           success: function (response) {
             alert("Valid Move!");
+            window.location.reload();
           },
           error: function (request, status, error) {
             alert(request.responseText);
           }
         });
+        
     }
   });
 
@@ -49,10 +104,15 @@ function init() {
 
 $( init );
 $(document).ajaxStop(function(){
-  window.location.reload();
-})
+  //window.location.reload();
+});
+
 </script>
-<div class = "boom-box col-10 offset-1"
+
+<!-- Button trigger modal -->
+ 
+
+ <div class = "boom-box col-10 offset-1"
   <br>
   <h1> WELCOME TO YOUR GAME MWAHAHAHAH </h1>
   <br>
@@ -76,7 +136,7 @@ $(document).ajaxStop(function(){
       <td class= 'position_column' data-x-position='<%=position_column%>' data-y-position='<%=position_row%>'>
         <div class='chess_pieces'>
           <%piece = @game.data_method[position_column][position_row]%>
-          <div id='<%= piece.color if piece.present?%>'>
+          <div id='<%= piece.color if piece.present?%>' data-piece-type='<%= piece.type if piece.present?%>'>
           <%=link_to piece.symbol.html_safe, piece_path(piece), onclick: 'return false' if piece.present?%>
           </div>
         </div>
@@ -90,3 +150,13 @@ $(document).ajaxStop(function(){
     <%= link_to 'Join', game_path, method: :put, class: 'btn btn-primary btn-large' %>
   <% end %>
 </div>
+
+<div id="pawn-promotion">
+    <form>
+    <input type="radio" name="radio" value="Knight"> Knight <br>
+    <input type="radio" name="radio" value="Rook"> Rook <br>
+    <input type="radio" name="radio" value="Bishop"> Bishop <br>
+    <input type="radio" name="radio" value="Queen"> Queen <br>
+    </form>
+</div>
+<button id="pawn-promote">Open Modal</button> <br>
