@@ -1,28 +1,27 @@
 <script>
 function init() {
-
+  // define modal for pawn promotion
   var dialog = $('#pawn-promotion').dialog({
-      autoOpen: false,
-      width: 350,
-      height: 300,
-      modal: true,
-      closeOnEscape: false,
-      draggable: true,
-      title: 'Pawn Promotion',
-      buttons: {
-          'Promote Pawn': function(){
-             promotePawn("href","row","col","color")
-          },
-          'Cancel': function () {
-              $('#pawn-promotion').dialog('close');
-              //window.reload;
+          autoOpen: false,
+          width: 350,
+          height: 300,
+          modal: true,
+          closeOnEscape: false,
+          draggable: true,
+          title: 'Pawn Promotion',
+          buttons: {
+              'Promote Pawn': function(){
+                 promotePawn(href,yCoord, xCoord,color)
+              },
+              'Cancel': function () {
+                  $('#pawn-promotion').dialog('close');
+                  //window.reload;
+              }      
           }
-          
-      }
-  });
-
+        });
+  //can leave function here
   function promotePawn(link,row,col,color) {
-    alert("promote "+ link + row+col+color+" to "+ $('input[name=radio]:checked', '#pawn-promotion').val());
+    alert("promote "+ link +" "+ row+col+color+" to "+ $('input[name=radio]:checked', '#pawn-promotion').val());
     /*$.ajax(
       type: "Post",
       url: "/pieces", //will look something like this /games/:id/pieces(.:format) similar to nomster//
@@ -40,6 +39,8 @@ function init() {
       url: link
     );*/
   }
+
+  //open module when a pawn reaches end of board
   $( "#pawn-promote" ).button().on( "click", function() {
         dialog.dialog( "open" );
         //make sure to cancel reload here
@@ -51,9 +52,11 @@ function init() {
 
   if (turn == white){
     $('#black a').draggable({disabled: true});
+    var color = "white"
   }
   else {
     $('#white a').draggable({disabled: true});
+    var color = "black"
   };
 
   $('a').draggable({
@@ -69,28 +72,17 @@ function init() {
      console.log(pieceType);      
     },
     drag: function( event, ui ) {
+      // x is going left or right (position_col)
       xCoord = $('.ui-droppable-hover').data('x-position');
+      // y is going up or down (position_row)
       yCoord = $('.ui-droppable-hover').data('y-position');
     },
     stop: function( event,ui ) {
-      if(pieceType == 'Pawn'){
+      // check for pawn promotion event
+      if(pieceType == 'Pawn' && ((yCoord == 0 && color == "black" ) || (yCoord == 7 && color == "white"))) {
         alert('You are moving a Pawn Piece');
-        $('#promotion').modal('show')
-        //break;
-        $( "#dialog-confirm" ).dialog({
-          resizable: false,
-          height: "auto",
-          width: 400,
-          modal: true,
-          buttons: {
-            "Delete all items": function() {
-              $( this ).dialog( "close" );
-            },
-            Cancel: function() {
-              $( this ).dialog( "close" );
-            }
-          }
-    });
+        
+        dialog.dialog( "open" );
       }
         $.ajax({
           type: "PUT",
