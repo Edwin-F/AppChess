@@ -11,7 +11,8 @@ function init() {
           title: 'Pawn Promotion',
           buttons: {
               'Promote Pawn': function(){
-                 promotePawn(href,yCoord, xCoord,color)
+                 promotePawn(href,yCoord, xCoord,color);
+                 $( this ).dialog( "close" );
               },
               'Cancel': function () {
                   $('#pawn-promotion').dialog('close');
@@ -22,22 +23,34 @@ function init() {
   //can leave function here
   function promotePawn(link,row,col,color) {
     alert("promote "+ link +" "+ row+col+color+" to "+ $('input[name=radio]:checked', '#pawn-promotion').val());
-    /*$.ajax(
+    //for create a piece 
+    $.ajax({
       type: "Post",
       url: "/pieces", //will look something like this /games/:id/pieces(.:format) similar to nomster//
       dataType: 'json',
       data: { piece: { 
-              position_row: function, 
-              position_column: function,//probably inputs for the function
-              color: function,
-              type: $('input[name=radio]:checked', '#pawn-promotion').val()}
-             }
-    );
+              position_row: row, 
+              position_column: col,//probably inputs for the function
+              color: color,
+              game_id: '<%= @game.id %>',
+              type: $('input[name=radio]:checked', '#pawn-promotion').val()
+              }
+            },
+      success: function(response){
+        alert('this was a success');
+        },
+      error: function (request, status, error) {
+          alert(request.responseText);
+      }
+    });
     //second ajax request to delete previous pawn piece
-    $.ajax(
-      type: "Delete",
-      url: link
-    );*/
+    $.ajax({
+      type: "DELETE",
+      url: link,
+      succes: function(response){alert('This delete was a success')},
+      error: function(request, status, error) {alert(request.responseText)}
+    });
+    window.location.reload();
   }
 
   //open module when a pawn reaches end of board
@@ -78,27 +91,29 @@ function init() {
       yCoord = $('.ui-droppable-hover').data('y-position');
     },
     stop: function( event,ui ) {
-      // check for pawn promotion event
-      if(pieceType == 'Pawn' && ((yCoord == 0 && color == "black" ) || (yCoord == 7 && color == "white"))) {
-        alert('You are moving a Pawn Piece');
-        
-        dialog.dialog( "open" );
-      }
-        $.ajax({
-          type: "PUT",
-          url: href,
-          data: {
-            x_coord: xCoord, 
-            y_coord: yCoord
-          },
-          success: function (response) {
-            alert("Valid Move!");
+      
+      $.ajax({
+        type: "PUT",
+        url: href,
+        data: {
+          x_coord: xCoord, 
+          y_coord: yCoord
+        },
+        success: function (response) {
+          alert("Valid Move!");
+          // check for pawn promotion event
+          if(pieceType == 'Pawn' && ((yCoord == 0 && color == "black" ) || (yCoord == 7 && color == "white"))) {
+            alert('You are moving a Pawn Piece');
+            
+            dialog.dialog( "open" );
+          } else {
             window.location.reload();
-          },
-          error: function (request, status, error) {
-            alert(request.responseText);
           }
-        });
+        },
+        error: function (request, status, error) {
+          alert(request.responseText);
+        }
+      });
         
     }
   });

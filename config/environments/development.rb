@@ -1,6 +1,9 @@
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 config.action_mailer.default_url_options = { host: 'mighty-pawn.herokuapp.com' } #not email here will be off due to local needs not sure how to fix!!
+  #added this this code to fix this error:
+  #Cannot render console from 10.0.2.2! Allowed networks: 127.0.0.1, ::1, 127.0.0.0/127.255.255.255
+  config.web_console.whitelisted_ips = '10.0.2.2'
 
   # In the development environment your application's code is reloaded on
   # every request. This slows down response time but is perfect for development

@@ -1,4 +1,13 @@
-class PiecesController < ApplicationController  
+class PiecesController < ApplicationController 
+
+  def create
+    @piece = Piece.create(piece_params)
+  end 
+
+  def destroy
+    @piece = Piece.find(params[:id])
+    @piece.destroy
+  end
 
   def update  
     @piece = Piece.find(params[:id])
@@ -44,4 +53,9 @@ class PiecesController < ApplicationController
       render :json => error_message, :status => :method_not_allowed
     end
   end
+
+  private
+    def piece_params
+      params.require(:piece).permit(:position_row, :position_column, :color, :type, :game_id)
+    end
 end
