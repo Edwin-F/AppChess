@@ -16,13 +16,13 @@ function init() {
               },
               'Cancel': function () {
                   $('#pawn-promotion').dialog('close');
-                  //window.reload;
+                  window.reload;
               }      
           }
         });
-  //can leave function here
+  
   function promotePawn(link,row,col,color) {
-    alert("promote "+ link +" "+ row+col+color+" to "+ $('input[name=radio]:checked', '#pawn-promotion').val());
+    //alert("promote "+ link +" "+ row+col+color+" to "+ $('input[name=radio]:checked', '#pawn-promotion').val());
     //for create a piece 
     $.ajax({
       type: "Post",
@@ -53,11 +53,11 @@ function init() {
     window.location.reload();
   }
 
-  //open module when a pawn reaches end of board
+  /*open module when a pawn reaches end of board
   $( "#pawn-promote" ).button().on( "click", function() {
         dialog.dialog( "open" );
         //make sure to cancel reload here
-    });
+    });*/
 
   turn = '<%= @game.turn %>';
   white = '<%= @game.white_player_id %>';
@@ -102,9 +102,7 @@ function init() {
         success: function (response) {
           alert("Valid Move!");
           // check for pawn promotion event
-          if(pieceType == 'Pawn' && ((yCoord == 0 && color == "black" ) || (yCoord == 7 && color == "white"))) {
-            alert('You are moving a Pawn Piece');
-            
+          if(pieceType == 'Pawn' && ((yCoord == 0 && color == "black" ) || (yCoord == 7 && color == "white"))) {         
             dialog.dialog( "open" );
           } else {
             window.location.reload();
@@ -112,6 +110,7 @@ function init() {
         },
         error: function (request, status, error) {
           alert(request.responseText);
+          window.location.reload();
         }
       });
         
@@ -180,4 +179,4 @@ $(document).ajaxStop(function(){
     <input type="radio" name="radio" value="Queen"> Queen <br>
     </form>
 </div>
-<button id="pawn-promote">Open Modal</button> <br>
+<!--<button id="pawn-promote">Open Modal</button> <br>->

@@ -139,4 +139,29 @@ RSpec.describe PiecesController, type: :controller do
       end
     end
   end
+
+  describe "piece#create" do 
+    context "when pawn is promoted" do
+      it "should allow new piece to be created" do
+        data = [7,3,"white","Queen", 1]
+        post :create, params: { piece: {position_row: data[0],position_column: data[1] ,color: data[2],type: data[3], game_id: data[4]}}
+        expect(response).to have_http_status(:success)
+        test_piece = Piece.last
+        test_piece_data = [test_piece.position_row,test_piece.position_column,test_piece.color,
+          test_piece.type,test_piece.game_id]
+        expect(test_piece_data).to eq(data)
+      end
+    end
+  end
+
+  describe "piece#destroy" do 
+    context "after pawn is promoted" do
+      it "should allow pawn piece to be destroyed" do
+        piece = Pawn.first #white pawn @ position_row: 1, position_column: 0
+        post :destroy, params: { id: piece.id}
+        expect(response).to have_http_status(:success)
+        expect(Piece.exists? piece.id).to eq(false)
+      end
+    end
+  end
 end
