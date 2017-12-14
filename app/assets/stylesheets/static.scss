@@ -17,9 +17,12 @@ td { /*Change this to change box size I just eyeballed on my computer! */
      width: 85px; height: 85px;
 }
 
+tr:nth-child(odd) td:nth-child(odd), tr:nth-child(even) td:nth-child(even) {
+  background: #734d26;
+}
 tr:nth-child(odd) td:nth-child(even), tr:nth-child(even) td:nth-child(odd) {
-	background: #F0F0F0;
-}/* #had internet help here not my design :! better than manually putting in black or white background to all the boxes though*/
+	background: #d6ac83;
+}/* had internet help here not my design :! better than manually putting in black or white background to all the boxes though*/
 
 table, th, td {  /*This is the line or border so changes as needed! */
    border: 5px solid black;

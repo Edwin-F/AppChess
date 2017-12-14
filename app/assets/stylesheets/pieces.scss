@@ -4,10 +4,10 @@
 
 #black a, #black a:hover,#black a:visited,#black a:link,#black a:active
 {
-    color: #303030;
+    color: black;
     text-decoration: none;
     outline: none;
-    text-shadow: -2px 2px red;
+    //text-shadow: -2px 2px black;
 }
 
 #white a, #white a:hover,#white a:visited, #white a:link, #white a:active
@@ -15,5 +15,5 @@
     color: white;
     text-decoration: none;
     outline: none;
-    text-shadow: -2px 2px black;
+    //text-shadow: -2px 2px black;
 }

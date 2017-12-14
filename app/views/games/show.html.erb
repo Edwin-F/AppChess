@@ -26,11 +26,11 @@ function init() {
     //for create a piece 
     $.ajax({
       type: "Post",
-      url: "/pieces", //will look something like this /games/:id/pieces(.:format) similar to nomster//
+      url: "/pieces",
       dataType: 'json',
       data: { piece: { 
               position_row: row, 
-              position_column: col,//probably inputs for the function
+              position_column: col,
               color: color,
               game_id: '<%= @game.id %>',
               type: $('input[name=radio]:checked', '#pawn-promotion').val()
@@ -52,12 +52,6 @@ function init() {
     });
     window.location.reload();
   }
-
-  /*open module when a pawn reaches end of board
-  $( "#pawn-promote" ).button().on( "click", function() {
-        dialog.dialog( "open" );
-        //make sure to cancel reload here
-    });*/
 
   turn = '<%= @game.turn %>';
   white = '<%= @game.white_player_id %>';
@@ -81,7 +75,6 @@ function init() {
       href = this.href;
       pieceType = $(this).parent().data('piece-type');
      //pieceType = this.parentElement.dataset.pieceType;
-     //.data('piece-type');
      console.log(pieceType);      
     },
     drag: function( event, ui ) {
@@ -123,14 +116,8 @@ function init() {
 };
 
 $( init );
-$(document).ajaxStop(function(){
-  //window.location.reload();
-});
 
 </script>
-
-<!-- Button trigger modal -->
- 
 
  <div class = "boom-box col-10 offset-1"
   <br>
@@ -179,4 +166,3 @@ $(document).ajaxStop(function(){
     <input type="radio" name="radio" value="Queen"> Queen <br>
     </form>
 </div>
-<!--<button id="pawn-promote">Open Modal</button> <br>->
